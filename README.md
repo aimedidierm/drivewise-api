@@ -48,6 +48,12 @@ Follow these steps to get started with the project:
     php artisan serve
 ```
 
+## Running tests
+
+```bash
+    php artisan test
+```
+
 ## Contributing
 
 🎉 Contributions are welcome! Feel free to open an issue or submit a pull request for any improvements or bug fixes.

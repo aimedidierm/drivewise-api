@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +16,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::get('/', function () {
+    return response()->json([
+        'message' => 'Welcome to Drivewise API'
+    ], Response::HTTP_OK);
+});
+
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+
+Route::group(["prefix" => "admin", "middleware" => ["auth:api", "isAdmin"], "as" => "admin."], function () {
+    Route::get('/', function () {
+        return response()->json([
+            'message' => 'Welcome Admin',
+        ], Response::HTTP_OK);
+    });
+});
+
+Route::group(["prefix" => "driver", "middleware" => ["auth:api", "isDriver"], "as" => "driver."], function () {
+    Route::get('/', function () {
+        return response()->json([
+            'message' => 'Welcome Driver',
+        ], Response::HTTP_OK);
+    });
 });
