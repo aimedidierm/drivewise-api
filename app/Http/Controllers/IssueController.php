@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserType;
 use App\Models\Issue;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\HttpFoundation\Response;
 
 class IssueController extends Controller
 {
@@ -12,7 +15,16 @@ class IssueController extends Controller
      */
     public function index()
     {
-        //
+        if (Auth::user()->type == UserType::ADMIN->value) {
+            $issues = Issue::all();
+            $issues->load('user.vehicle');
+        } else {
+            # code...
+        }
+
+        return response()->json([
+            'issues' => $issues
+        ], Response::HTTP_OK);
     }
 
     /**

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\FuelPriceRequest;
 use App\Models\FuelPrice;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class FuelPriceController extends Controller
 {
@@ -12,38 +14,33 @@ class FuelPriceController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(FuelPrice $fuelPrice)
-    {
-        //
+        $prices = FuelPrice::all();
+        return response()->json([
+            'prices' => $prices
+        ], Response::HTTP_OK);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, FuelPrice $fuelPrice)
+    public function update(FuelPriceRequest $request, string $id)
     {
-        //
-    }
+        $price = FuelPrice::find($id);
+        if ($price) {
+            $price->update([
+                'name' => $request->input('name'),
+                'type' => $request->input('type'),
+                'price' => $request->input('price'),
+            ]);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(FuelPrice $fuelPrice)
-    {
-        //
+            return response()->json([
+                'message' => 'Price updated',
+                'price' => $price,
+            ], Response::HTTP_OK);
+        } else {
+            return response()->json([
+                'message' => 'Price not found',
+            ], Response::HTTP_NOT_FOUND);
+        }
     }
 }

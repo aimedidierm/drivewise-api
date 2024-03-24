@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum UserType: string
+enum FuelType: string
 {
     case DIESEL = 'diesel';
     case GASOLINE = 'gasoline';
