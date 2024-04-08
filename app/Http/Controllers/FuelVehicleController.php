@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserType;
+use App\Http\Requests\FuelRequest;
 use App\Models\FuelVehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +20,8 @@ class FuelVehicleController extends Controller
             $fuels = FuelVehicle::all();
             $fuels->load('user.vehicle');
         } else {
-            # code...
+            $fuels = FuelVehicle::where('user_id', Auth::id())->get();
+            $fuels->load('user.vehicle');
         }
 
         return response()->json([
@@ -30,9 +32,19 @@ class FuelVehicleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(FuelRequest $request)
     {
-        //
+        $fuel = FuelVehicle::create([
+            'volume' => $request->input('volume'),
+            'total' => $request->input('total'),
+            'vehicle_id' => Auth::user()->vehicle->id,
+            'user_id' => Auth::id(),
+        ]);
+
+        return response()->json([
+            'message' => 'Fuel filling created',
+            'fuel' => $fuel,
+        ], Response::HTTP_OK);
     }
 
     /**
@@ -51,21 +63,5 @@ class FuelVehicleController extends Controller
                 'message' => 'Fuel refilling not found',
             ], Response::HTTP_NOT_FOUND);
         }
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, FuelVehicle $fuelVehicle)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(FuelVehicle $fuelVehicle)
-    {
-        //
     }
 }

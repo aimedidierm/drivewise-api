@@ -2,12 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\IssueStatus;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use ReflectionClass;
 
-class IssueRequest extends FormRequest
+class FuelRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +22,8 @@ class IssueRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string',
-            'description' => 'required|string',
-            'status' => ['required', 'string', Rule::in(array_values((new ReflectionClass(IssueStatus::class))->getConstants()))]
+            'volume' => 'required|numeric',
+            'total' => 'required|numeric',
         ];
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\FuelPriceController;
 use App\Http\Controllers\FuelVehicleController;
 use App\Http\Controllers\GroupController;
 use App\Http\Controllers\IssueController;
+use App\Http\Controllers\JourneyController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\VehicleController;
 use Illuminate\Http\Request;
@@ -58,5 +59,14 @@ Route::group(["prefix" => "driver", "middleware" => ["auth:api", "isDriver"], "a
         ], Response::HTTP_OK);
     });
     // Route::get('/notifications', 'NotificationController@index');
+    Route::get('/', [DashboardController::class, 'driverDashboard']);
     Route::apiResource('/issues', IssueController::class)->only('index', 'store', 'show', 'update', 'destroy');
+    Route::apiResource('/journey', JourneyController::class)->only('index', 'store', 'show');
+    Route::apiResource('/fuel', FuelVehicleController::class)->only('index', 'store', 'show');
+    Route::apiResource('/prices', FuelPriceController::class)->only('index');
+    Route::get('/vehicle', function () {
+        return response()->json([
+            'vehicle' => Auth::user()->vehicle->load('group', 'user'),
+        ], Response::HTTP_OK);
+    });
 });
