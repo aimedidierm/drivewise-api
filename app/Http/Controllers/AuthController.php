@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
+use Laravel\Passport\Token;
 
 class AuthController extends Controller
 {
@@ -52,6 +54,48 @@ class AuthController extends Controller
             return response()->json([
                 'error' => 'Invalid Email and Password'
             ], Response::HTTP_UNAUTHORIZED);
+        }
+    }
+
+    public function update(UserRequest $request)
+    {
+        $user = User::find(Auth::id());
+
+        $userData = [
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
+        ];
+
+        if (!empty($request->input('password'))) {
+            $userData['password'] = bcrypt($request->input('password'));
+        }
+
+        $user->update($userData);
+
+        return response()->json([
+            'message' => 'Your details updated',
+            'user' => $user,
+        ], Response::HTTP_OK);
+    }
+
+    public function logout()
+    {
+        if (Auth::guard('api')->check()) {
+            $user = Auth::guard('api')->user();
+
+            $user->tokens->each(function (Token $token) {
+                $token->revoke();
+            });
+            return response()->json(
+                [
+                    "message" => "User logged out successfully",
+                    "success" => true
+                ],
+                Response::HTTP_OK
+            );
+        } else {
+            return response()->json(['error' => 'Invalid session'], Response::HTTP_UNAUTHORIZED);
         }
     }
 }

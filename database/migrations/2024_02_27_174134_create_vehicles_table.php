@@ -20,6 +20,7 @@ return new class extends Migration
             //the amount of fuel a vehicle can consume per 1 KM
             $table->float('fuel')->default(0.0);
             $table->string('fuel_type');
+            $table->string('meter');
             $table->unsignedBigInteger("group_id");
             $table->foreign("group_id")->on("groups")->references("id");
             //The driver of vehicle

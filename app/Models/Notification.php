@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FuelPrice extends Model
+class Notification extends Model
 {
     use HasFactory;
 
@@ -15,9 +15,10 @@ class FuelPrice extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'type',
-        'price'
+        'title',
+        'notification',
+        'vehicle_id',
+        'user_id',
     ];
 
     /**
