@@ -15,7 +15,7 @@ class MaintenanceController extends Controller
     public function index()
     {
         $maintenance = Maintenance::all();
-        $maintenance->load('vehicle');
+        $maintenance->load('vehicle.user');
         return response()->json([
             'maintenance' => $maintenance
         ], Response::HTTP_OK);
@@ -24,20 +24,21 @@ class MaintenanceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    // public function store(MaintenanceRequest $request)
-    // {
-    //     $maintenance = Maintenance::create([
-    //         'name' => $request->input('name'),
-    //         'email' => $request->input('email'),
-    //         'phone' => $request->input('phone'),
-    //         'password' => bcrypt($request->input('password')),
-    //     ]);
+    public function store(MaintenanceRequest $request)
+    {
+        $maintenance = Maintenance::create([
+            'title' => $request->input('title'),
+            'notification' => $request->input('notification'),
+            'interval' => $request->input('interval'),
+            'unit' => $request->input('unit'),
+            'vehicle_id' => $request->input('vehicle_id'),
+        ]);
 
-    //     return response()->json([
-    //         'maintenance' => 'Maintenance created',
-    //         'driver' => $maintenance,
-    //     ], Response::HTTP_OK);
-    // }
+        return response()->json([
+            'message' => 'Maintenance created',
+            'maintenance' => $maintenance,
+        ], Response::HTTP_OK);
+    }
 
     /**
      * Display the specified resource.
@@ -46,7 +47,7 @@ class MaintenanceController extends Controller
     {
         $maintenance = Maintenance::where('id', $id)->first();
         if ($maintenance) {
-            $maintenance->load('vehicle');
+            $maintenance->load('vehicle.user');
             return response()->json([
                 'maintenance' => $maintenance,
             ], Response::HTTP_OK);
@@ -57,31 +58,32 @@ class MaintenanceController extends Controller
         }
     }
 
-    // /**
-    //  * Update the specified resource in storage.
-    //  */
-    // public function update(DriverRequest $request, string $id)
-    // {
-    //     $driver = User::find($id);
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(MaintenanceRequest $request, string $id)
+    {
+        $maintenance = Maintenance::find($id);
 
-    //     if ($driver) {
-    //         $driver->update([
-    //             'name' => $request->input('name'),
-    //             'email' => $request->input('email'),
-    //             'phone' => $request->input('phone'),
-    //             'password' => bcrypt($request->input('password')),
-    //         ]);
+        if ($maintenance) {
+            $maintenance->update([
+                'title' => $request->input('title'),
+                'notification' => $request->input('notification'),
+                'interval' => $request->input('interval'),
+                'unit' => $request->input('unit'),
+                'vehicle_id' => $request->input('vehicle_id'),
+            ]);
 
-    //         return response()->json([
-    //             'message' => 'Driver updated',
-    //             'driver' => $driver,
-    //         ], Response::HTTP_OK);
-    //     } else {
-    //         return response()->json([
-    //             'message' => 'Driver not found',
-    //         ], Response::HTTP_NOT_FOUND);
-    //     }
-    // }
+            return response()->json([
+                'message' => 'Driver updated',
+                'maintenance' => $maintenance,
+            ], Response::HTTP_OK);
+        } else {
+            return response()->json([
+                'message' => 'Maintenance not found',
+            ], Response::HTTP_NOT_FOUND);
+        }
+    }
 
     /**
      * Remove the specified resource from storage.

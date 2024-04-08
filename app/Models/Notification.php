@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Maintenance extends Model
+class Notification extends Model
 {
     use HasFactory;
 
@@ -17,10 +17,8 @@ class Maintenance extends Model
     protected $fillable = [
         'title',
         'notification',
-        'read',
-        'interval',
-        'unit',
         'vehicle_id',
+        'user_id',
     ];
 
     /**
@@ -32,9 +30,4 @@ class Maintenance extends Model
         'created_at',
         'updated_at'
     ];
-
-    public function vehicle()
-    {
-        return $this->belongsTo(Vehicle::class);
-    }
 }

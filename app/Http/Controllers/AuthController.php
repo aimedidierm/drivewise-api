@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
+use Laravel\Passport\Token;
 
 class AuthController extends Controller
 {
@@ -76,5 +77,25 @@ class AuthController extends Controller
             'message' => 'Your details updated',
             'user' => $user,
         ], Response::HTTP_OK);
+    }
+
+    public function logout()
+    {
+        if (Auth::guard('api')->check()) {
+            $user = Auth::guard('api')->user();
+
+            $user->tokens->each(function (Token $token) {
+                $token->revoke();
+            });
+            return response()->json(
+                [
+                    "message" => "User logged out successfully",
+                    "success" => true
+                ],
+                Response::HTTP_OK
+            );
+        } else {
+            return response()->json(['error' => 'Invalid session'], Response::HTTP_UNAUTHORIZED);
+        }
     }
 }

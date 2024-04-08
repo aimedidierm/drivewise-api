@@ -32,6 +32,7 @@ Route::get('/', function () {
 });
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::put('/settings', [AuthController::class, 'update'])->middleware('auth:api')->name('settings.update');
 Route::get('/settings', function () {
     return response()->json([
@@ -56,4 +57,6 @@ Route::group(["prefix" => "driver", "middleware" => ["auth:api", "isDriver"], "a
             'message' => 'Welcome Driver',
         ], Response::HTTP_OK);
     });
+    // Route::get('/notifications', 'NotificationController@index');
+    Route::apiResource('/issues', IssueController::class)->only('index', 'store', 'show', 'update', 'destroy');
 });
