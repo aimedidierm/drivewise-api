@@ -44,7 +44,7 @@ class AuthController extends Controller
                 return response()->json([
                     'user' => $user,
                     'token' => $token
-                ], 200);
+                ], Response::HTTP_OK);
             } else {
                 return response()->json([
                     'error' => 'Invalid password'

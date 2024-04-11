@@ -34,6 +34,7 @@ class VehicleController extends Controller
             'fuel_type' => $request->input('fuel_type'),
             'group_id' => $request->input('group_id'),
             'user_id' => $request->input('user_id'),
+            'meter' => '00000000'
         ]);
 
         return response()->json([

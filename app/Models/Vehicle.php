@@ -20,6 +20,7 @@ class Vehicle extends Model
         'plate',
         'load',
         'fuel',
+        'meter',
         'fuel_type',
         'group_id',
         'user_id',
