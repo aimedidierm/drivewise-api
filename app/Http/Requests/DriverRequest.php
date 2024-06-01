@@ -23,7 +23,7 @@ class DriverRequest extends FormRequest
     public function rules(): array
     {
         if (request()->isMethod('post')) {
-            $passwordRule = 'required';
+            $passwordRule = 'sometimes';
             $emailUnique = 'unique:users,email';
         } elseif (request()->isMethod('put') || request()->isMethod('patch')) {
             $passwordRule = 'sometimes';
@@ -34,7 +34,7 @@ class DriverRequest extends FormRequest
             'name' => 'required|string',
             'email' => 'required', 'string', 'email', $emailUnique,
             'phone' => 'required|string',
-            'password' => [$passwordRule, 'required', 'string', 'min:6']
+            'password' => [$passwordRule, 'string', 'min:6']
         ];
     }
 }
