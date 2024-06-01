@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Enums\UserType;
 use App\Http\Requests\DriverRequest;
+use App\Mail\DriverCredentials;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Str;
 
 class DriverController extends Controller
 {
@@ -26,12 +29,15 @@ class DriverController extends Controller
      */
     public function store(DriverRequest $request)
     {
+        $password = Str::random(6);;
         $driver = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'phone' => $request->input('phone'),
-            'password' => bcrypt($request->input('password')),
+            'password' => bcrypt($password),
         ]);
+
+        Mail::to($driver->email)->send(new DriverCredentials($driver->email, $password));
 
         return response()->json([
             'message' => 'Driver created',
