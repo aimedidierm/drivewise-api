@@ -2,10 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\MaintenanceTimeUnit;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use ReflectionClass;
 
 class MaintenanceRequest extends FormRequest
 {
@@ -27,8 +24,9 @@ class MaintenanceRequest extends FormRequest
         return [
             'title' => 'required|string',
             'notification' => 'required|string',
-            'interval' => 'required|integer',
-            'unit' => ['required', 'string', Rule::in(array_values((new ReflectionClass(MaintenanceTimeUnit::class))->getConstants())),],
+            'date1' => 'required|date|before:now',
+            'date2' => 'required|date|before:now',
+            'date3' => 'required|date|before:now',
             'vehicle_id' => 'required|integer|exists:vehicles,id'
         ];
     }

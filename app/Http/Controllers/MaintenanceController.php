@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\MaintenanceRequest;
 use App\Models\Maintenance;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Carbon\Carbon;
 
 class MaintenanceController extends Controller
 {
@@ -26,11 +26,19 @@ class MaintenanceController extends Controller
      */
     public function store(MaintenanceRequest $request)
     {
+        $dates = [
+            $request->input('date1'),
+            $request->input('date2'),
+            $request->input('date3')
+        ];
+
+        $intervalData = $this->calculateInterval($dates);
+
         $maintenance = Maintenance::create([
             'title' => $request->input('title'),
             'notification' => $request->input('notification'),
-            'interval' => $request->input('interval'),
-            'unit' => $request->input('unit'),
+            'interval' => $intervalData['interval'],
+            'unit' => $intervalData['unit'],
             'vehicle_id' => $request->input('vehicle_id'),
         ]);
 
@@ -101,6 +109,28 @@ class MaintenanceController extends Controller
             return response()->json([
                 'message' => 'Maintenance not found',
             ], Response::HTTP_NOT_FOUND);
+        }
+    }
+
+    private function calculateInterval($dates)
+    {
+        $intervals = [];
+        for ($i = 0; $i < count($dates) - 1; $i++) {
+            $intervals[] = Carbon::parse($dates[$i + 1])->diffInMinutes(Carbon::parse($dates[$i]));
+        }
+
+        $averageInterval = array_sum($intervals) / count($intervals);
+
+        if ($averageInterval < 60) {
+            return ['interval' => $averageInterval, 'unit' => 'minute'];
+        } elseif ($averageInterval < 1440) {
+            return ['interval' => $averageInterval / 60, 'unit' => 'hour'];
+        } elseif ($averageInterval < 10080) {
+            return ['interval' => $averageInterval / 1440, 'unit' => 'day'];
+        } elseif ($averageInterval < 40320) {
+            return ['interval' => $averageInterval / 10080, 'unit' => 'week'];
+        } else {
+            return ['interval' => $averageInterval / 40320, 'unit' => 'month'];
         }
     }
 }
