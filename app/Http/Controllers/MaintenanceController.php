@@ -33,7 +33,6 @@ class MaintenanceController extends Controller
         ];
 
         $intervalData = $this->calculateInterval($dates);
-
         $maintenance = Maintenance::create([
             'title' => $request->input('title'),
             'notification' => $request->input('notification'),
@@ -124,13 +123,13 @@ class MaintenanceController extends Controller
         if ($averageInterval < 60) {
             return ['interval' => (int) $averageInterval, 'unit' => 'minute'];
         } elseif ($averageInterval < 1440) {
-            return ['interval' => (int) $averageInterval / 60, 'unit' => 'hour'];
+            return ['interval' => (int) ($averageInterval / 60), 'unit' => 'hour'];
         } elseif ($averageInterval < 10080) {
-            return ['interval' => (int) $averageInterval / 1440, 'unit' => 'day'];
+            return ['interval' => (int) ($averageInterval / 1440), 'unit' => 'day'];
         } elseif ($averageInterval < 40320) {
-            return ['interval' => (int) $averageInterval / 10080, 'unit' => 'week'];
+            return ['interval' => (int) ($averageInterval / 10080), 'unit' => 'week'];
         } else {
-            return ['interval' => (int) $averageInterval / 40320, 'unit' => 'month'];
+            return ['interval' => (int) ($averageInterval / 40320), 'unit' => 'month'];
         }
     }
 }
