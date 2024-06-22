@@ -29,7 +29,7 @@ class DriverController extends Controller
      */
     public function store(DriverRequest $request)
     {
-        $password = Str::random(6);;
+        $password = Str::random(6);
         $driver = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),

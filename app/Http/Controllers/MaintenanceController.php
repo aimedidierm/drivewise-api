@@ -122,15 +122,15 @@ class MaintenanceController extends Controller
         $averageInterval = array_sum($intervals) / count($intervals);
 
         if ($averageInterval < 60) {
-            return ['interval' => $averageInterval, 'unit' => 'minute'];
+            return (int) ['interval' => $averageInterval, 'unit' => 'minute'];
         } elseif ($averageInterval < 1440) {
-            return ['interval' => $averageInterval / 60, 'unit' => 'hour'];
+            return (int) ['interval' => $averageInterval / 60, 'unit' => 'hour'];
         } elseif ($averageInterval < 10080) {
-            return ['interval' => $averageInterval / 1440, 'unit' => 'day'];
+            return (int) ['interval' => $averageInterval / 1440, 'unit' => 'day'];
         } elseif ($averageInterval < 40320) {
-            return ['interval' => $averageInterval / 10080, 'unit' => 'week'];
+            return (int) ['interval' => $averageInterval / 10080, 'unit' => 'week'];
         } else {
-            return ['interval' => $averageInterval / 40320, 'unit' => 'month'];
+            return (int) ['interval' => $averageInterval / 40320, 'unit' => 'month'];
         }
     }
 }

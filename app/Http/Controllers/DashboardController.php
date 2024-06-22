@@ -34,7 +34,7 @@ class DashboardController extends Controller
         $vehicles = Vehicle::where('user_id', Auth::id())->count();
         $issues = Issue::where('user_id', Auth::id())->count();
         $fuel = FuelVehicle::where('user_id', Auth::id())->count();
-        $journeys = Journey::count();
+        $journeys = Journey::where('user_id', Auth::id())->count();
         return response()->json([
             'vehicles' => $vehicles,
             'issues' => $issues,
