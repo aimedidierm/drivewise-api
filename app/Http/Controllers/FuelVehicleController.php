@@ -74,13 +74,17 @@ class FuelVehicleController extends Controller
             $data->load('user.vehicle');
             // return view('admin_report', ['data' => $data]);
             $pdf = Pdf::loadView('admin_report', ['data' => $data]);
-            return $pdf->download('report.pdf');
+            return response($pdf->output(), 200)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'attachment; filename="report.pdf"');
         } else {
             $data = FuelVehicle::where('user_id', Auth::id())->get();
             $data->load('user.vehicle');
             //     return view('driver_report', ['data' => $data]);
             $pdf = Pdf::loadView('driver_report', ['data' => $data]);
-            return $pdf->download('report.pdf');
+            return response($pdf->output(), 200)
+                ->header('Content-Type', 'application/pdf')
+                ->header('Content-Disposition', 'attachment; filename="report.pdf"');
         }
     }
 }
