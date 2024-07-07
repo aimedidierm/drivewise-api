@@ -21,6 +21,7 @@ class Maintenance extends Model
         'interval',
         'unit',
         'vehicle_id',
+        'next_time',
     ];
 
     /**

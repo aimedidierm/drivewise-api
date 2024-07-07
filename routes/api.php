@@ -50,6 +50,7 @@ Route::group(["prefix" => "admin", "middleware" => ["auth:api", "isAdmin"], "as"
     Route::apiResource('/prices', FuelPriceController::class)->only('index', 'update');
     Route::get('/issues', [IssueController::class, 'index'])->name('issues');
     Route::apiResource('/fuel', FuelVehicleController::class)->only('index', 'show');
+    Route::get('/report', [FuelVehicleController::class, 'report']);
 });
 
 Route::group(["prefix" => "driver", "middleware" => ["auth:api", "isDriver"], "as" => "driver."], function () {
@@ -69,4 +70,5 @@ Route::group(["prefix" => "driver", "middleware" => ["auth:api", "isDriver"], "a
             'vehicle' => Auth::user()->vehicle->load('group', 'user'),
         ], Response::HTTP_OK);
     });
+    Route::get('/report', [FuelVehicleController::class, 'report']);
 });
