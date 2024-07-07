@@ -33,12 +33,33 @@ class MaintenanceController extends Controller
         ];
 
         $intervalData = $this->calculateInterval($dates);
+
+        $nextTime = Carbon::now();
+        switch ($intervalData['unit']) {
+            case 'minute':
+                $nextTime->addMinutes($intervalData['interval']);
+                break;
+            case 'hour':
+                $nextTime->addHours($intervalData['interval']);
+                break;
+            case 'day':
+                $nextTime->addDays($intervalData['interval']);
+                break;
+            case 'week':
+                $nextTime->addWeeks($intervalData['interval']);
+                break;
+            case 'month':
+                $nextTime->addMonths($intervalData['interval']);
+                break;
+        }
+
         $maintenance = Maintenance::create([
             'title' => $request->input('title'),
             'notification' => $request->input('notification'),
             'interval' => $intervalData['interval'],
             'unit' => $intervalData['unit'],
             'vehicle_id' => $request->input('vehicle_id'),
+            'next_time' => $nextTime
         ]);
 
         return response()->json([
