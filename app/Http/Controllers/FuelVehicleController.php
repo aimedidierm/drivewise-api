@@ -69,18 +69,16 @@ class FuelVehicleController extends Controller
 
     public function report(ReportRequest $request)
     {
-        if (Auth::user()->role == UserType::ADMIN) {
+        if (Auth::user()->type == UserType::ADMIN->value) {
             $data = FuelVehicle::all();
             $data->load('user.vehicle');
-            // return view('admin_report', ['data' => $data]);
-            $pdf = Pdf::loadView('admin_report', ['data' => $data]);
-            return $pdf->download('report.pdf');
+
+            return $data;
         } else {
             $data = FuelVehicle::where('user_id', Auth::id())->get();
             $data->load('user.vehicle');
-            //     return view('driver_report', ['data' => $data]);
-            $pdf = Pdf::loadView('driver_report', ['data' => $data]);
-            return $pdf->download('report.pdf');
+
+            return $data;
         }
     }
 }
