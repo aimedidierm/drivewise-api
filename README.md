@@ -1,6 +1,7 @@
 # My DRIVEWISE API Laravel Project
 
 🚀 Welcome to My DRIVEWISE API Laravel Project! This README will guide you through the installation process and setup.
+Drivewise is a sophisticated route optimization mobile app designed to streamline and enhance the efficiency of delivery services, field operations, and logistics. The software uses advanced algorithms and real-time data to optimize routes, reduce travel time, and improve overall resource utilization
 
 ## Installation
 
